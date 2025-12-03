@@ -18,6 +18,8 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+SET(CMAKE_BUILD_TYPE "Debug")
+
 # Compiling move semantics/references executables
 add_executable(references src/references.cpp)
 add_executable(move_semantics src/move_semantics.cpp)

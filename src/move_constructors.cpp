@@ -34,6 +34,8 @@
 // For instance, if a class manages a dynamically allocated memory block, then
 // creating more than one instance of this class, without proper handling, can
 // result in double deletion or memory leaks.
+// 当必须保证一个类只有一个实例时，不带复制运算符的类非常有用。
+// 例如，如果一个类管理着一块动态分配的内存块，那么如果没有妥善处理，创建该类的多个实例可能会导致重复删除或内存泄漏。
 class Person {
 public:
   Person() : age_(0), nicknames_({}), valid_(true) {}
@@ -108,13 +110,16 @@ int main() {
   // implemented and used in a class. First, we create an instance of the class
   // Person. Note that the object andy is a valid object.
   Person andy(15445, {"andy", "pavlo"});
+  // "andy" 和 "pavlo" 字符串字面量，在程序只读数据段
+  // {"andy", "pavlo"} 初始化列表对象 std::initializer_list 类型，栈内存，指向只读段的两个字符串字面量
+  // 使用初始化列表对象构造一个临时的 std::vector（vector 有实现初始化列表的构造函数），堆内存，会发生数据拷贝，这个临时的对象是将亡值 xvalue
   std::cout << "Printing andy's validity: ";
   andy.PrintValid();
 
   // To move the contents of the andy object to another object, we can use
   // std::move in a couple ways. This method calls the move assignment operator.
   Person andy1;
-  andy1 = std::move(andy);
+  andy1 = std::move(andy);   // 调用移动赋值函数，andy 数据所有权转给 andy1
 
   // Note that andy1 is valid, while andy is not a valid object.
   std::cout << "Printing andy1's validity: ";
@@ -126,7 +131,8 @@ int main() {
   // of the original andy object have moved to andy1, then moved to andy2. The
   // andy and andy1 lvalues are effectively defunct (and should not be used,
   // unless they are re-initialized).
-  Person andy2(std::move(andy1));
+  // * defunct 不复存在的，作废的
+  Person andy2(std::move(andy1));    // 调用移动构造函数，andy1 数据所有权转给 andy2
 
   // Note that andy2 is valid, while andy1 is not a valid object.
   std::cout << "Printing andy2's validity: ";
@@ -141,10 +147,12 @@ int main() {
   // these lines of code to see the resulting compiler errors.
   // Person andy3;
   // andy3 = andy2;
+  // 这一行编译器会报错：Overload resolution selected deleted operator '='
 
   // Because the copy constructor is deleted, this code will not compile. Try
   // uncommenting this code to see the resulting compiler errors.
   // Person andy4(andy2);
+  // 这一行编译器会报错：Call to deleted constructor of 'Person'
 
   return 0;
 }
