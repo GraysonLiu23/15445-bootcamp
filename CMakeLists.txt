@@ -43,6 +43,7 @@ add_executable(rwlock src/rwlock.cpp)
 # Compiling misc executables
 add_executable(wrapper_class src/wrapper_class.cpp)
 add_executable(iterator src/iterator.cpp)
+add_executable(range_based_for src/range_based_for.cpp)
 add_executable(auto src/auto.cpp)
 add_executable(namespaces src/namespaces.cpp)
 

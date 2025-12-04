@@ -53,6 +53,10 @@ private:
 // A utility function to print the elements of an int vector. The code for this
 // should be understandable and similar to the code iterating through elements
 // of a vector in the main function.
+// 【注意】这个函数的形参，其类型是常量左值引用类型，它可以接受左值也能接受右值的实参
+// print_int_vector(v); OK
+// print_int_vector({1, 2, 3, 4}); OK，接受能够被转为 std::vector<int> 类型的值（会创建临时对象，纯右值）
+// print_int_vector(get_vector()); OK，接受某个函数返回的临时对象（纯右值）
 void print_int_vector(const std::vector<int> &vec) {
   for (const int &elem : vec) {
     std::cout << elem << " ";
@@ -60,12 +64,24 @@ void print_int_vector(const std::vector<int> &vec) {
   std::cout << "\n";
 }
 
+std::vector<int> get_vector() {
+  return std::vector<int>{1,2,3,4};
+}
+
 int main() {
+  std::vector<int> v{1,2,3,4};
+  print_int_vector(v);
+
+  auto a = get_vector();
+  print_int_vector(std::move(a));
+
   // We can declare a Point vector with the following syntax.
   std::vector<Point> point_vector;
 
   // It is also possible to initialize the vector via an initializer list.
   std::vector<int> int_vector = {0, 1, 2, 3, 4, 5, 6};
+  // 注：两种列表初始化方法 复制列表初始化 直接列表初始化 本质相同
+  // std::vector<int> int_vector {0, 1, 2, 3, 4, 5, 6}; 这个也是可以的，但是类型检查会更严格，禁止窄化转换
 
   // There are two functions for appending data to the back of the vector. They
   // are push_back and emplace_back. Generally, emplace_back is slightly faster,
@@ -77,6 +93,9 @@ int main() {
   point_vector.push_back(Point(35, 36));
   std::cout << "Appending to the point_vector via emplace_back:\n";
   point_vector.emplace_back(37, 38);
+  // emplace_back 直接传入 vector 容器元素构造函数的参数，直接在容器内原地构造
+  // push_back 先构造一个元素（临时对象），接着移动到容器内（如果这个对象有资源，必须实现移动构造函数与移动赋值函数）
+  // 从这个角度来说 emplace_back 更快一些
 
   // Let's just add more items to the back of our point_vector.
   point_vector.emplace_back(39, 40);

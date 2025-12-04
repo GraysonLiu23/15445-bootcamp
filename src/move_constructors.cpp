@@ -112,7 +112,7 @@ int main() {
   Person andy(15445, {"andy", "pavlo"});
   // "andy" 和 "pavlo" 字符串字面量，在程序只读数据段
   // {"andy", "pavlo"} 初始化列表对象 std::initializer_list 类型，栈内存，指向只读段的两个字符串字面量
-  // 使用初始化列表对象构造一个临时的 std::vector（vector 有实现初始化列表的构造函数），堆内存，会发生数据拷贝，这个临时的对象是将亡值 xvalue
+  // 使用初始化列表对象构造一个临时的 std::vector（vector 有实现初始化列表的构造函数），堆内存，会发生数据拷贝，这个临时的对象是纯右值
   std::cout << "Printing andy's validity: ";
   andy.PrintValid();
 

@@ -60,6 +60,7 @@ class DLLIterator {
       : curr_(head) {}
 
     // Implementing a prefix increment operator (++iter).
+    // 重载前缀自增运算符，调用者需要使用自增后的对象，在函数的实现中，先自增，后返回自增后的对象，可以直接返回该对象引用
     DLLIterator& operator++() {
       curr_ = curr_->next_;
       return *this;
@@ -70,8 +71,12 @@ class DLLIterator {
     // of the operator. The prefix operator returns the result of the
     // increment, while the postfix operator returns the iterator before
     // the increment.
+    // 重载后缀自增运算符（注：这个括号内的 int 只是向编译器表明重载的是后缀运算符，是固定用法）
+    // 调用者需要使用自增前的对象，在函数的实现中，需要先通过拷贝保留自增前的对象，之后再自增，因此需要返回一个对象
+    // 不能返回一个引用，因为 temp 离开该函数的作用域后会被销毁，被销毁后调用者就无法通过该引用找到这个对象了
+    // 【注：在迭代中，++iter 的性能要比 iter++ 性能要好，因为不需要拷贝（虽然编译器可能会帮你做优化）】
     DLLIterator operator++(int) {
-      DLLIterator temp = *this;
+      DLLIterator temp = *this;  // 发生拷贝构造
       ++*this;
       return temp;
     }
