@@ -60,6 +60,7 @@ int main() {
   if (int_set.count(3) == 1) {
     std::cout << "Element 3 is in the set.\n";
   }
+  // 由于 std::set 不允许重复元素（当集合中已经存在某个元素，再insert会被忽略），因此 count 返回的结果只能是 0 或者 1
 
   // To erase an element, we can use the erase function. The erase function can
   // firstly, take a key to erase. For instance, if we want to erase 4 from the

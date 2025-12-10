@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <iostream>
 
 struct Node {
@@ -39,6 +40,13 @@ public:
     }
 
     int operator*() { return curr_->value_; }
+
+    DLLIterator &operator+(size_t offset) {
+      for (size_t i = 0; i < offset; ++i) {
+        curr_ = curr_->next_;
+      }
+      return *this;
+    }
 
   private:
     Node *curr_;
@@ -86,6 +94,12 @@ int main() {
     std::cout << *iter << " ";
   }
   std::cout << std::endl;
+
+  std::cout << "Test the overload plus operator\n";
+  DLL::DLLIterator iter = dll.begin();
+  std::cout << "The first element: " << *iter << "\n";
+  iter = iter + 2;
+  std::cout << "The third element: " << *iter << "\n";
 
   return 0; 
 }

@@ -16,6 +16,7 @@
 // std::unique_ptr is a type of smart pointer that retains sole ownership of an
 // object This means that no two instances of std::unique_ptr can manage the
 // same object.
+// std::unique_ptr 是一种智能指针，它保留对对象的唯一所有权。这意味着 std::unique_ptr 的两个实例不能管理同一个对象。
 
 // Includes std::cout (printing) for demo purposes.
 #include <iostream>
@@ -31,8 +32,8 @@ class Point {
 public:
   Point() : x_(0), y_(0) {}
   Point(int x, int y) : x_(x), y_(y) {}
-  inline int GetX() { return x_; }
-  inline int GetY() { return y_; }
+  inline int GetX() const { return x_; }
+  inline int GetY() const { return y_; }
   inline void SetX(int x) { x_ = x; }
   inline void SetY(int y) { y_ = y; }
 

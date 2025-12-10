@@ -78,6 +78,7 @@ int main() {
   // The following code deep-copies int_values into copy_int_values,
   // since auto infers the type as std::vector<int>, not std::vector<int>&.
   auto copy_int_values = int_values;
+  // 这里由于 auto 被编译器推断为 std::vector<int>，所以赋值时会发生拷贝
 
   // However, the following code defines ref_int_values, which is a reference
   // to int_values, and therefore does not deep copy the int_values vector.

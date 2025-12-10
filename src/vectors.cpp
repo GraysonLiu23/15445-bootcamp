@@ -138,6 +138,8 @@ int main() {
   // If you are confused about iterators, it may be helpful to read the header of
   // iterator.cpp.
   int_vector.erase(int_vector.begin() + 2);
+  // int_vector.begin() 返回的是一个 std::vector<int>::interator 迭代器对象，迭代器对象本质是一个指向 vector 中某一个元素的指针，这里返回的是指向第一个元素的迭代器
+  // 这个迭代器类型重载了 + 运算符，因此能够通过 +2 实现迭代器往后推进 2 个位置的操作
   std::cout << "Printing the elements of int_vector after erasing "
                "int_vector[2] (which is 2)\n";
   print_int_vector(int_vector);
@@ -174,11 +176,16 @@ int main() {
   // it returns. When erase is called, it deletes only the elements that
   // remove_if has partitioned away to be deleted, up to the end of the vector.
   // This outer erase takes a range argument, as we saw in the previous example.
+  // remove_if 函数**不会**真正删除元素，而是将要删除的元素移动到容器末尾，并返回一个指向新范围末尾的迭代器
+  // 例如，当前容器 [o x o x o o]，需要删除其中 x 的元素，经过 remove_if 处理之后，容器会变为 [o o o o x x]
+  // 这就是将元素划分（partition）成两部分了
+  // 该函数返回指向容器内下标为 4 的元素的迭代器，接着作为 erase 函数的第一个参数，表示从这里开始删除直到最后一个
   point_vector.erase(
       std::remove_if(point_vector.begin(), point_vector.end(),
                      [](const Point &point) { return point.GetX() == 37; }),
       point_vector.end());
-
+  // Lambda 表达式          | captures 子句：在函数体中引入/捕获新的变量，可以加&前缀引用访问或者值访问，[] 表示不捕获
+  //                         |                 | 参数列表 |                            | Lambda 函数体
   // After calling remove here, we should see that three elements remain in our
   // point vector. Only the one with value (37, 445) is deleted.
   std::cout << "Printing the point_vector after (37, 445) is erased:\n";

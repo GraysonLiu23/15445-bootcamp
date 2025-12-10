@@ -76,6 +76,7 @@ int main() {
     std::cout
         << "A key-value pair with key spam exists in the unordered map.\n";
   }
+  // 与 std::set 类似，std::unordered_map 也不允许重复键，因此 count 返回的值也只可能是 0 或者 1
 
   // The erase function deletes values from the unordered map. It can take a
   // key as an argument.
